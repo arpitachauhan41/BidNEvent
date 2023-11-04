@@ -1,15 +1,18 @@
-const connectToMongo = require("./database.js");
-var cors = require("cors");
+const connectToMango=require('./database.js');
 const express = require('express');
-const app = express();
-connectToMongo();
 
-const port = 8080;
-app.use(cors());
-app.use(express.json());
+connectToMango();
+const app=express()
+app.use(express.json())
+const port = 5000
 
-//app.use()
-const PORT = 8080;
-app.listen(PORT , ()=>{
-    console.log(`server connected at port: ${PORT}`);
+app.get('/',(req,res)=>{
+  res.send("hello wrold");
+})
+app.use('/api/vendorauth',require('./routes/vendorauth'))
+app.use('/api/customerauth',require('./routes/customerauth'))
+app.use('/api/itemdetails',require('./routes/itemdetails'))
+ 
+app.listen(port, () => {
+  console.log(`Bidnvent backend listening on http://localhost:${port}`)
 })
