@@ -1,7 +1,6 @@
 //signup_customer
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
-
 const customerSchema = new Schema({
     name:{
         type:String,

@@ -4,23 +4,24 @@ const { query, validationResult, body} = require('express-validator');
 const Vendor = require('../models/Vendor');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-// const fetchvendor = require('../MiddleWare/fetchvendor');
+const fetchvendor = require('../MiddleWare/fetchvendor');
  const jwt_secret = "qwerty_divyashunk";
 
 //Route1 signup..../api/vendorauth/CreateVendor no login require
 router.post('/CreateVendor',[
-     body('name').isLength({min:5}),
-    body('email').isEmail(),
-     body('password').isLength({min:5}),
-     body('phone_num').isLength({require:10})
+     body('name').isLength(),
+     body('email').isEmail().withMessage("Invalid email"),
+     body('password').isLength(),
+     body('phone_num').isLength({required:10}),
+     body('Gst_Number').isLength({required:15}),
+     body('Shop_number').isLength()
  ],
      async (req,res)=>{
-        let success=false;
+        let success=false;  
          const errors = validationResult(req);
          if(!errors.isEmpty()){
-             return res.status(400).json({error:errors.array()});
-         }
-         //check if email exist
+            return res.status(400).json({error:errors.array()});
+          }
          try{
              let vendor = await Vendor.findOne({email:req.body.email});
              if(vendor){
@@ -33,10 +34,11 @@ router.post('/CreateVendor',[
                  name:req.body.name,
                  email:req.body.email,
                  password:secPass,
-                 phone_num:req.body.phone_num
+                 phone_num:req.body.phone_num, 
+                 Gst_Number:req.body.Gst_Number,
+                 Shop_number:req.body.Shop_number
              })
-             
-             const data = {
+              const data = {
                   vendor:{
                       id:vendor.id
                   }
@@ -46,7 +48,7 @@ router.post('/CreateVendor',[
               res.json({success,Authtoken});
          }
          catch(error){
-             console.error(error.message);
+            
              res.status(500).send("some error occured");
          }
      }
@@ -57,9 +59,8 @@ router.post('/CreateVendor',[
     body("password","Password cannot be blank").exists(),
 ],async (req,res)=>{
     let success =false;
-    //validation using express validator for data validation such as redundant emails,phone number
     const errors = validationResult(req);
-  if (!errors.isEmpty()) {
+     if (!errors.isEmpty()) {
     return res.status(400).json({errors:errors.array()});
   }
   const {email,password}= req.body;
@@ -79,10 +80,7 @@ router.post('/CreateVendor',[
       res.json({success,AuthToken}) 
 }
 catch(error){
-  console.error(error.message);
-  res.status(500).send("some error occured")
+ res.status(500).send("some error occured")
 }
-
 });
-
 module.exports=router 

@@ -1,20 +1,23 @@
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
-
 const itemSchema = new Schema({
-    name:{
+    person_size:{
         type:String,
         require:true
     },
-    desc:{
+    venue:{
         type:String,
         require:true
     },
-    image:{
+    categories:{
         type:String,
         require:true
     },
-    price:{
+    event:{
+        type:String,
+        required:true
+    },
+    budget:{
         type:Number,
         require:true
     }

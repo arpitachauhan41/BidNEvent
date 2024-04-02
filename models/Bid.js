@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
-
 const BidSchema = new Schema({
     EventId:{
         type:mongoose.Schema.Types.ObjectId,
@@ -19,6 +18,5 @@ const BidSchema = new Schema({
         require:true
     }
 })
-
 const Bid = mongoose.model('Bid',BidSchema);
 module.exports = Bid;
